@@ -92,6 +92,22 @@ public class game {
 		}
 		// Character joe = new Character(name, element);
 
+		String difficulty;
+
+		do {
+
+			difficulty = JOptionPane.showInputDialog(null, "What difficulty would you like to play on?\n1. Easy\n2. Normal\n3. Hard");
+
+			if (option == null) {
+				JOptionPane.showMessageDialog(null, "You have quit the game prematurely, I hope you die.");
+				throw new PrematureExitGameException("You have quit the game prematurely, I hope you die.");
+			}
+
+		} while(!(option.equals("1") || option.equals("2") || option.equals("3")));
+
+		int dif = Integer.parseInt(difficulty) - 1;
+
+
 		JOptionPane.showMessageDialog(null, "Name: " + joe.name + "\nElement: " + joe.element + "\nHP: " + joe.healthPoints + "\nGold: " + joe.gold + "\nYou are strong against elements: " + joe.strength1 + " and " + joe.strength2 + "\nYou are weak against elements: " + joe.weakness1 + " and " + joe.weakness2);
 		System.out.println(joe.name);
 		System.out.println(joe.element);
@@ -126,7 +142,7 @@ public class game {
 								break;
 					}
 
-					monster.bossEvolve();
+					monster.bossEvolve(dif);
 
 					boss = monster;
 
@@ -153,6 +169,10 @@ public class game {
 								break;
 					}
 
+					if (dif > 0) {
+						monster.levelUp(dif);
+					}
+					
 					grid[y][x] = monster;
 
 					System.out.println("We have a " + monster.name + " at position " + y + "," + x);

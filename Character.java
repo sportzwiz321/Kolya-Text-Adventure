@@ -71,13 +71,9 @@ public class Character {
 		return boss;
 	}
 
-	public void bossEvolve() {
+	public void bossEvolve(int difficulty) {
 		boss = true;
-		int x = 3;
-		while(x > 0) {
-			levelUp();
-			x--;
-		}
+		levelUp(difficulty + 4);
 	}
 
 	public int getLevel() {
@@ -323,6 +319,14 @@ public class Character {
 		healthPoints += 20;
 		maximumHealthPoints += 20;
 
+	}
+
+	public void levelUp(int levels) {
+		int x = levels;
+		while(x > 0) {
+			levelUp();
+			x--;
+		}
 	}
 
 	public String toString() {
