@@ -495,7 +495,7 @@ public class game {
 
 				index = Integer.parseInt(lolshop);
 
-			} while (index > league.storeSize() || index < 1);
+			} while (index > league.storeSize() + 1 || index < 1);
 			
 			if(index == league.storeSize() + 1) {
 				JOptionPane.showMessageDialog(null, "You scamper from the store\nhoping to pillage more gold\nbefore this amazing sale ends");
