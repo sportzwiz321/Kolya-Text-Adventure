@@ -333,6 +333,11 @@ public class Character {
 		}
 	}
 
+	public void commitSeppuku() {
+		healthPoints = 0;
+		alive = false;
+	}
+
 	public String toString() {
 
 		if (head == null) {

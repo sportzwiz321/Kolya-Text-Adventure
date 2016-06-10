@@ -57,9 +57,11 @@ public class game {
 
 		JOptionPane.showMessageDialog(null, "Hello " + name + " a pleasure to make your acquaintance");
 
-		option = "";
+		int type;
 
 		do {
+
+			option = "";
 
 			while (!tryParseInt(option)) {
 
@@ -72,7 +74,7 @@ public class game {
 
 			}
 
-			int type = Integer.parseInt(option);
+			type = Integer.parseInt(option);
 
 		} while (type > 5 || type < 1);
 
@@ -89,19 +91,27 @@ public class game {
 		}
 
 		String difficulty;
+		int dif;
 
 		do {
 
-			difficulty = JOptionPane.showInputDialog(null, "What difficulty would you like to play on?\n1. Easy\n2. Normal\n3. Hard");
+			difficulty = "";
 
-			if (option == null) {
-				JOptionPane.showMessageDialog(null, "You have quit the game prematurely, I hope you die.");
-				throw new PrematureExitGameException("You have quit the game prematurely, I hope you die.");
+			while(!tryParseInt(difficulty)) {
+
+				difficulty = JOptionPane.showInputDialog(null, "What difficulty would you like to play on?\n1. Easy\n2. Normal\n3. Hard");
+
+				if (difficulty == null) {
+					JOptionPane.showMessageDialog(null, "You have quit the game prematurely, I hope you die.");
+					throw new PrematureExitGameException("You have quit the game prematurely, I hope you die.");
+				}
+
 			}
 
-		} while(!(option.equals("1") || option.equals("2") || option.equals("3")));
+			dif = Integer.parseInt(difficulty) - 1;
 
-		int dif = Integer.parseInt(difficulty) - 1;
+		} while(dif > 2 || dif < 0);
+
 		if (dif == 0) {
 			difficulty = "Easy";
 		} else if (dif == 1) {
@@ -287,92 +297,74 @@ public class game {
 			choice = choice + index + ". Commit Seppuku";
 
 			String selection;
+			int sel = 0;
 
 			if (index == 3) {
 				
-				do{
+				do {
 
-					selection = JOptionPane.showInputDialog(null, choice);
+					selection = "";
 
-					if (selection == null) {
-						JOptionPane.showMessageDialog(null, "You have quit the game prematurely, I hope you die.");
-						throw new PrematureExitGameException("You have quit the game prematurely, I hope you die.");
+					while(!tryParseInt(selection)) {
+
+						selection = JOptionPane.showInputDialog(null, choice);
+
+						if (selection == null) {
+							JOptionPane.showMessageDialog(null, "You have quit the game prematurely, I hope you die.");
+							throw new PrematureExitGameException("You have quit the game prematurely, I hope you die.");
+						}
+
 					}
 
-				} while(!(selection.equals("1") || selection.equals("2") || selection.equals("3")));
+					sel = Integer.parseInt(selection);
 
-				int sel = Integer.parseInt(selection);
-
-				switch(sel) {
-					case 1: move(options[0]);
-							break;
-					case 2: move(options[1]);
-							break;
-					case 3: move(options[2]);
-							break;
-					default:
-							break;
-				}
+				} while(sel > 3 || sel < 1);
 
 			} else if (index == 4) {
 
-				do{
+				do {
 
-					selection = JOptionPane.showInputDialog(null, choice);
+					selection = "";
 
-					if (selection == null) {
-						JOptionPane.showMessageDialog(null, "You have quit the game prematurely, I hope you die.");
-						throw new PrematureExitGameException("You have quit the game prematurely, I hope you die.");
+					while(!tryParseInt(selection)) {
+
+						selection = JOptionPane.showInputDialog(null, choice);
+
+						if (selection == null) {
+							JOptionPane.showMessageDialog(null, "You have quit the game prematurely, I hope you die.");
+							throw new PrematureExitGameException("You have quit the game prematurely, I hope you die.");
+						}
+
 					}
 
-				} while(!(selection.equals("1") || selection.equals("2") || selection.equals("3") || selection.equals("4")));
+					sel = Integer.parseInt(selection);
 
-				int sel = Integer.parseInt(selection);
-
-				switch(sel) {
-					case 1: move(options[0]);
-							break;
-					case 2: move(options[1]);
-							break;
-					case 3: move(options[2]);
-							break;
-					case 4: move(options[3]);
-							break;
-					default:
-							break;
-				}
+				} while(sel > 4 || sel < 1);
 
 			} else if (index == 5) {
 
-				do{
+				do {
 
-					selection = JOptionPane.showInputDialog(null, choice);
+					selection = "";
 
-					if (selection == null) {
-						JOptionPane.showMessageDialog(null, "You have quit the game prematurely, I hope you die.");
-						throw new PrematureExitGameException("You have quit the game prematurely, I hope you die.");
+					while(!tryParseInt(selection)) {
+
+						selection = JOptionPane.showInputDialog(null, choice);
+
+						if (selection == null) {
+							JOptionPane.showMessageDialog(null, "You have quit the game prematurely, I hope you die.");
+							throw new PrematureExitGameException("You have quit the game prematurely, I hope you die.");
+						}
+
 					}
 
-				} while(!(selection.equals("1") || selection.equals("2") || selection.equals("3") || selection.equals("4") || selection.equals("5")));
+					sel = Integer.parseInt(selection);
 
-				int sel = Integer.parseInt(selection);
-
-				switch(sel) {
-					case 1: move(options[0]);
-							break;
-					case 2: move(options[1]);
-							break;
-					case 3: move(options[2]);
-							break;
-					case 4: move(options[3]);
-							break;
-					case 5: move(options[4]);
-							break;
-					default:
-							break;
-				}
+				} while(sel > 5 || sel < 1);
 
 			}
+
+			move(options[sel-1]);
 
 
 		} while(!((joe.healthPoints == 0) || (grid[mapy-1][mapx-1].healthPoints == 0)));
@@ -399,7 +391,7 @@ public class game {
 							break;
 			case "Go South": moveDown();
 							break;
-			case "Commit Seppuku":	joe.healthPoints = 0;
+			case "Commit Seppuku":	joe.commitSeppuku();
 									JOptionPane.showMessageDialog(null, "You, " + joe.name + ", no longer wish to live in this world with us\nYou commit Seppuku and writhe uncontrollably and agonizingly to your death");
 									break;
 			default: JOptionPane.showMessageDialog(null, "You have gone nowhere!");
@@ -446,7 +438,7 @@ public class game {
 
 		Character ninja = grid[yPosition][xPosition];
 
-		if(ninja.alive == true){
+		if(ninja.isAlive() == true){
 			JOptionPane.showMessageDialog(null, "A level " + ninja.getLevel() + " " + ninja.getName() + " appears before you");
 			ninja = joe.battle(ninja);
 		} else {
@@ -468,7 +460,7 @@ public class game {
 
 		} while (!(input.equals("1") || input.equals("2")));
 		
-		 	if (input.equals("1")) {
+	 	if (input.equals("1")) {
 			String lolshop;
 			String item;
 			Item[] hextech = league.itemStats();
@@ -480,7 +472,11 @@ public class game {
 
 			String lol = new String(itemList);
 
+			int index;
+
 			do {
+
+				lolshop = "";
 
 				while(!tryParseInt(lolshop)) {
 
@@ -495,29 +491,14 @@ public class game {
 
 				}
 
-				int index = Integer.parseInt(lolshop);
+				index = Integer.parseInt(lolshop);
 
-			} while (index > 5 || index < 1);
-
-			do {
-
-				lolshop = JOptionPane.showInputDialog(null, "I'm always happy to take your money!\nYou have: " + joe.gold + " gold\nThese are the items in my shop:\n" + itemList + "And if you don't want anything, then just\n5. Leave the store");
-
-				if (lolshop == null) {
-				
-					JOptionPane.showMessageDialog(null, "You have quit the game prematurely, I hope you die.");
-					throw new PrematureExitGameException("You have quit the game prematurely, I hope you die.");
-
-				}
-
-			} while(!(lolshop.equals("1") || lolshop.equals("2") || lolshop.equals("3") || lolshop.equals("4") || lolshop.equals("5")));
+			} while (index > league.storeSize() || index < 1);
 			
-			if (lolshop.equals("5")) {
+			if(index == league.storeSize()) {
 				JOptionPane.showMessageDialog(null, "You scamper from the store\nhoping to pillage more gold\nbefore this amazing sale ends");
 				return;
 			} else {
-
-				int index = Integer.parseInt(lolshop);
 				Item stick = league.retrieveItem(index);
 
 				int cost = stick.getCost();
@@ -528,9 +509,7 @@ public class game {
 					JOptionPane.showMessageDialog(null, "You have bought a " + stick.getName() + " for " + stick.getCost() + " gold\nYou now have " + joe.gold + " gold remaining.");
 					joe.empower(stick);
 				}
-
 			}
-
 
 		} else if (input.equals("2")) {
 			JOptionPane.showMessageDialog(null, "You scamper from the store\nhoping to pillage more gold\nbefore this amazing sale ends");
