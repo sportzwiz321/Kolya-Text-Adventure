@@ -84,6 +84,10 @@ public class Character {
 		return name;
 	}
 
+	public boolean isAlive() {
+		return alive;
+	}
+
 	public int attack(Character enemy) {
 
 		float initialDamage = attackDamage - enemy.defense;
