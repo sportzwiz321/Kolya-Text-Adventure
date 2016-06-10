@@ -60,36 +60,67 @@ public class game {
 
 		JOptionPane.showMessageDialog(null, "Hello " + name + " a pleasure to make your acquaintance");
 
+		option = "";
+
 		do {
 
-			option = JOptionPane.showInputDialog(null, "What elemental affinity will you allign yourself with?\n1) Fire\n2) Water\n3) Earth\n4) Wind\n5) Thunder");
+			while (!tryParseInt(option)) {
 
-			if (option == null) {
-				JOptionPane.showMessageDialog(null, "You have quit the game prematurely, I hope you die.");
-				throw new PrematureExitGameException("You have quit the game prematurely, I hope you die.");
+				option = JOptionPane.showInputDialog(null, "What elemental affinity will you allign yourself with?\n1) Fire\n2) Water\n3) Earth\n4) Wind\n5) Thunder");
+
+				if (option == null) {
+					JOptionPane.showMessageDialog(null, "You have quit the game prematurely, I hope you die.");
+					throw new PrematureExitGameException("You have quit the game prematurely, I hope you die.");
+				}
+
 			}
 
-		} while(!(option.equals("1") || option.equals("2") || option.equals("3") || option.equals("4") || option.equals("5")));
+		} while (Integer.parseInt(option) > 5 && Integer.parseInt(option) < 1);
 
-		if (option.equals("1")) {
-			// element = "Fire";
+		int type = Integer.parseInt(option);
+
+		if (type == 1) {
 			joe = new Fire(name);
-		} else if (option.equals("2")) {
-			// element = "Water";
+		} else if (type == 2) {
 			joe = new Water(name);
-		} else if (option.equals("3")) {
-			// element = "Earth";
+		} else if (type == 3) {
 			joe = new Earth(name);
-		} else if (option.equals("4")) {
-			// element = "Wind";
+		} else if (type == 4) {
 			joe = new Wind(name);
-		} else if (option.equals("5")) {
-			// element = "Thunder";
+		} else if (type == 5) {
 			joe = new Thunder(name);
-		} else {
-			// element = "Normal";
-			joe = new Character(name);
 		}
+
+		// do {
+
+		// 	option = JOptionPane.showInputDialog(null, "What elemental affinity will you allign yourself with?\n1) Fire\n2) Water\n3) Earth\n4) Wind\n5) Thunder");
+
+		// 	if (option == null) {
+		// 		JOptionPane.showMessageDialog(null, "You have quit the game prematurely, I hope you die.");
+		// 		throw new PrematureExitGameException("You have quit the game prematurely, I hope you die.");
+		// 	}
+
+		// } while(!(option.equals("1") || option.equals("2") || option.equals("3") || option.equals("4") || option.equals("5")));
+
+		// if (option.equals("1")) {
+		// 	// element = "Fire";
+		// 	joe = new Fire(name);
+		// } else if (option.equals("2")) {
+		// 	// element = "Water";
+		// 	joe = new Water(name);
+		// } else if (option.equals("3")) {
+		// 	// element = "Earth";
+		// 	joe = new Earth(name);
+		// } else if (option.equals("4")) {
+		// 	// element = "Wind";
+		// 	joe = new Wind(name);
+		// } else if (option.equals("5")) {
+		// 	// element = "Thunder";
+		// 	joe = new Thunder(name);
+		// } else {
+		// 	// element = "Normal";
+		// 	joe = new Character(name);
+		// }
 		// Character joe = new Character(name, element);
 
 		String difficulty;
@@ -106,9 +137,15 @@ public class game {
 		} while(!(option.equals("1") || option.equals("2") || option.equals("3")));
 
 		int dif = Integer.parseInt(difficulty) - 1;
+		if (dif == 0) {
+			difficulty = "Easy";
+		} else if (dif == 1) {
+			difficulty = "Normal";
+		} else {
+			difficulty = "Hard";
+		}
 
-
-		JOptionPane.showMessageDialog(null, "Name: " + joe.name + "\nElement: " + joe.element + "\nHP: " + joe.healthPoints + "\nGold: " + joe.gold + "\nYou are strong against elements: " + joe.strength1 + " and " + joe.strength2 + "\nYou are weak against elements: " + joe.weakness1 + " and " + joe.weakness2);
+		JOptionPane.showMessageDialog(null, "Name: " + joe.name + "\nElement: " + joe.element + "\nDifficulty: " + difficulty + "\nHP: " + joe.healthPoints + "\nGold: " + joe.gold + "\nYou are strong against elements: " + joe.strength1 + " and " + joe.strength2 + "\nYou are weak against elements: " + joe.weakness1 + " and " + joe.weakness2);
 		System.out.println(joe.name);
 		System.out.println(joe.element);
 		String menuAction;
@@ -751,6 +788,15 @@ public class game {
 				return;
 			}
 
+		}
+
+		public static boolean tryParseInt(String number) {
+			try {
+				Integer.parseInt(number);
+				return true;
+			} catch (NumberFormatException e) {
+				return false;
+			}
 		}
 
 		// public static String[] options() {
