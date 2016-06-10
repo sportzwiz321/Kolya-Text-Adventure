@@ -19,6 +19,14 @@ public class StoreTest {
 
 		// System.out.println(abc.lookupCost("BORK"));
 
+		Item[] alpha = abc.itemCostList();
+
+		System.out.println("\nCost Order:");
+
+		for (int x = 0; x < alpha.length; x++) {
+			System.out.println(alpha[x]);
+		}
+
 		System.out.println();
 		System.out.println(abc);
 		System.out.println("Empty: " + abc.isEmpty());
@@ -26,6 +34,12 @@ public class StoreTest {
 
 		abc.delete("Tri-Force");
 		abc.delete("Big F Sword");
+
+		System.out.println("\nCost Order:");
+
+		for (int x = 0; x < alpha.length; x++) {
+			System.out.println(alpha[x]);
+		}
 
 		System.out.println();
 		System.out.println(abc);

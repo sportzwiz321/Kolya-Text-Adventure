@@ -465,7 +465,7 @@ public class game {
 	 	if (input.equals("1")) {
 			String lolshop;
 			String item;
-			Item[] hextech = league.itemStats();
+			Item[] hextech = league.itemCostList();
 			StringBuffer itemList = new StringBuffer();
 
 			for (int x = 1; x < hextech.length + 1; x++) {

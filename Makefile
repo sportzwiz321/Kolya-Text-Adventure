@@ -2,11 +2,11 @@
 # A Makefile with macros
 #------------------------------------------------------------------------------
 JAVAC      = javac 
-MAINCLASS  = StoreTest
+MAINCLASS  = game
 JAVASRC    = $(wildcard *.java)
 CLASSES    = $(patsubst %.java, %.class, $(JAVASRC))
 JARCLASSES = $(patsubst %.class, %*.class, $(CLASSES))
-JARFILE    = ST
+JARFILE    = game
 
 
 all: $(JARFILE)

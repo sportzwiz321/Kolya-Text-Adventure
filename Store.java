@@ -144,6 +144,26 @@ public class Store {
 
 	}
 
+	private Item[] storeInCostOrder(Node r) {
+
+		Item[] items = new Item[numItems];
+		placeInOrder(r, items);
+
+		for (int j = 1; j < numItems; j++) {
+			int i = j-1;
+			Item temp = items[j];
+			while(i >= 0 && temp.getCost() < items[i].getCost()) {
+				items[i+1] = items[i];
+				i--;
+			}
+			items[i+1] = temp;
+
+		}
+
+		return items;
+
+	}
+
 	public int storeSize() {
 
 		return numItems;
@@ -351,6 +371,12 @@ public class Store {
 		placeInOrder(root, items);
 		return items;
 		
+	}
+
+	public Item[] itemCostList() {
+
+		return storeInCostOrder(root);
+
 	}
 
 }
