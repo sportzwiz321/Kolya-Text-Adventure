@@ -84,6 +84,10 @@ public class Character {
 		return name;
 	}
 
+	public boolean isAlive() {
+		return alive;
+	}
+
 	public int attack(Character enemy) {
 
 		float initialDamage = attackDamage - enemy.defense;
@@ -327,6 +331,11 @@ public class Character {
 			levelUp();
 			x--;
 		}
+	}
+
+	public void commitSeppuku() {
+		healthPoints = 0;
+		alive = false;
 	}
 
 	public String toString() {
