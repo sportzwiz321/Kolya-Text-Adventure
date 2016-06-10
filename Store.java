@@ -8,14 +8,26 @@ public class Store {
 		Node left;
 		Node right;
 
-		public Node(String i, int c, String s, int sb) {
-			stick = new Item(i, c, s, sb);
+		public Node(Item stick) {
+			this.stick = stick;
 			left = null;
 			right = null;
 		}
 
 		public String getItemName() {
 			return stick.getName();
+		}
+
+		public int getItemCost() {
+			return stick.getCost();
+		}
+
+		public String getItemStat() {
+			return stick.getStat();
+		}
+
+		public int getItemStatBoost() {
+			return stick.getStatBoost();
 		}
 
 	}
@@ -35,7 +47,7 @@ public class Store {
 		Node n = root;
 
 		while(n != null) {
-			if(n.getItemName() == item) {
+			if(item == n.getItemName()) {
 				return n;
 			} else if (item.compareTo(n.getItemName()) > 0) {
 				n = n.right;
@@ -173,8 +185,7 @@ public class Store {
 		Node n = findKey(item);
 
 		if (n != null) {
-			Item sword = n.stick;
-			return sword.getCost();
+			return n.getItemCost();
 		} else {
 			return -1;
 		}
@@ -186,8 +197,7 @@ public class Store {
 		Node n = findKey(item);
 
 		if (n != null) {
-			Item sword = n.stick;
-			return sword.getStat();
+			return n.getItemStat();
 		} else {
 			return null;
 		}
@@ -199,23 +209,22 @@ public class Store {
 		Node n = findKey(item);
 
 		if (n != null) {
-			Item sword = n.stick;
-			return sword.getStatBoost();
+			return n.getItemStatBoost();
 		} else {
 			return -1;
 		}
 
 	}
 
-	public void insert(String item, int cost, String stat, int statBoost) throws DuplicateItemException {
+	public void insert(Item stick) throws DuplicateItemException {
 
-		Node n = findKey(item);
+		Node n = findKey(stick.getName());
 
 		if (n != null) {
 			throw new DuplicateItemException("Store error: Called insert() on pre-existing item");
 		} else {
 
-			n = new Node(item, cost, stat, statBoost);
+			n = new Node(stick);
 			
 			if (root == null) {
 				root = n;
@@ -225,7 +234,7 @@ public class Store {
 				boolean placed = false;
 
 				while(!placed) {
-					if (item.compareTo(x.getItemName()) > 0) {
+					if (stick.getName().compareTo(x.getItemName()) > 0) {
 						if (x.right == null) {
 							x.right = n;
 							placed = true;

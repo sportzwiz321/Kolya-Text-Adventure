@@ -7,15 +7,15 @@ public class StoreTest {
 		System.out.println("Empty: " + abc.isEmpty());
 		System.out.println("Store Size: " + abc.storeSize());
 
-		abc.insert("Big F Sword", 13, "AD", 5);
-		abc.insert("Tri-Force", 38, "AD", 15);
-		abc.insert("Stinger", 11, "AD", 5);
-		abc.insert("Boots of Speed", 3, "HP", 2);
-		abc.insert("Warmog's Armor", 29, "HP", 10);
-		abc.insert("Blade of the Ruined King", 34, "AD", 10);
-		abc.insert("Dead Man's Plate", 29, "ARMOR", 10);
-		abc.insert("Giant's Belt", 10, "HP", 5);
-		abc.insert("Runic Echoes", 26, "AD", 10);
+		abc.insert(new Item("Big F Sword", 13, "AD", 5));
+		abc.insert(new Item("Tri-Force", 38, "AD", 15));
+		abc.insert(new Item("Stinger", 11, "AD", 5));
+		abc.insert(new Item("Boots of Speed", 3, "HP", 2));
+		abc.insert(new Item("Warmog's Armor", 29, "HP", 10));
+		abc.insert(new Item("Blade of the Ruined King", 34, "AD", 10));
+		abc.insert(new Item("Dead Man's Plate", 29, "ARMOR", 10));
+		abc.insert(new Item("Giant's Belt", 10, "HP", 5));
+		abc.insert(new Item("Runic Echoes", 26, "AD", 10));
 
 		// System.out.println(abc.lookupCost("BORK"));
 

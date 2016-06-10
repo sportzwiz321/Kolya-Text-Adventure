@@ -18,10 +18,12 @@ public class game {
 		int mapy = 3;
 		int error;
 		Store lol = new Store();
-		lol.insert("B.F. Sword", 5, "AD", 5);
-		lol.insert("Infinity Edge", 10, "AD", 10);
-		lol.insert("Giant's Belt", 5, "HP", 5);
-		lol.insert("Warmog's Armor", 10, "HP", 10);
+		lol.insert(new Item("B.F. Sword", 5, "AD", 5));
+		lol.insert(new Item("Infinity Edge", 10, "AD", 10));
+		lol.insert(new Item("Giant's Belt", 5, "HP", 5));
+		lol.insert(new Item("Warmog's Armor", 10, "HP", 10));
+		lol.insert(new Item("Cloth Armor", 3, "ARMOR", 3));
+		lol.insert(new Item("Thornmail", 12, "ARMOR", 15));
 		Character boss = null;
 
 		do {
@@ -124,12 +126,12 @@ public class game {
 		System.out.println(joe.name);
 		System.out.println(joe.element);
 		String menuAction;
-		grid = new Character[mapy][mapx];
+		grid = new Character[mapx][mapy];
 
 		for (int y = 0 ; y < mapy ; y++) {
 			for (int x = 0 ; x < mapx ; x++) {
 				Character monster;
-				if (y == mapy - 1 && x == mapx -1) {
+				if (x == mapx - 1 && y == mapy -1) {
 
 					Random rand = new Random();
 					int selector = rand.nextInt(5) + 1;
@@ -153,24 +155,24 @@ public class game {
 
 					boss = monster;
 
-					grid[y][x] = monster;
+					grid[x][y] = monster;
 
-					System.out.println("We have a " + monster.name + " at position " + y + "," + x);
+					System.out.println("We have a " + monster.name + " at position " + x + "," + y);
 
-				} else if (!(y == 0 && x == 0)) {
+				} else if (!(x == 0 && y == 0)) {
 					Random rand = new Random();
 					int selector = rand.nextInt(5) + 1;
 
 					switch (selector) {
-						case 1: monster = new Fire("Sasuke, the Avenger");
+						case 1: monster = new Fire("Blaziken, the Avenger");
 								break;
-						case 2: monster = new Water("Zabuza, the Demon in the Mist");
+						case 2: monster = new Water("Feraligator, the Demon in the Mist");
 								break;
-						case 3: monster = new Earth("Gaara, the Sand Beast");
+						case 3: monster = new Earth("Torterra, the Sand Beast");
 								break;
-						case 4: monster = new Wind("Naruto, the Future Hokage");
+						case 4: monster = new Wind("Swello, the Future Hokage");
 								break;
-						case 5: monster = new Thunder("Kakashi, the Copycat Ninja");
+						case 5: monster = new Thunder("Zapdos, the Copycat Ninja");
 								break;
 						default: monster = new Character("Ninja");
 								break;
@@ -180,9 +182,9 @@ public class game {
 						monster.levelUp(dif);
 					}
 					
-					grid[y][x] = monster;
+					grid[x][y] = monster;
 
-					System.out.println("We have a " + monster.name + " at position " + y + "," + x);
+					System.out.println("We have a " + monster.name + " at position " + x + "," + y);
 
 				}
 				
@@ -218,13 +220,13 @@ public class game {
 			if (yPosition < mapy - 1) {
 
 				if (options[0] == null) {
-					options[0] = "Go South";
+					options[0] = "Go North";
 				} else if (options[1] == null) {
-					options[1] = "Go South";
+					options[1] = "Go North";
 				} else if (options[2] == null) {
-					options[2] = "Go South";
+					options[2] = "Go North";
 				} else if (options[3] == null) {
-					options[3] = "Go South";
+					options[3] = "Go North";
 				}
 
 			}
@@ -246,18 +248,18 @@ public class game {
 			if (yPosition > 0) {
 
 				if (options[0] == null) {
-					options[0] = "Go North";
+					options[0] = "Go South";
 				} else if (options[1] == null) {
-					options[1] = "Go North";
+					options[1] = "Go South";
 				} else if (options[2] == null) {
-					options[2] = "Go North";
+					options[2] = "Go South";
 				} else if (options[3] == null) {
-					options[3] = "Go North";
+					options[3] = "Go South";
 				}
 
 			}
 
-			String choice = "What would you like to do? You are currently at " + yPosition + "," + xPosition + "\n";
+			String choice = "What would you like to do? You are currently at " + xPosition + "," + yPosition + "\n";
 
 			int index = 1;
 
@@ -267,25 +269,25 @@ public class game {
 					Character foe;
 					switch(options[j]) {
 
-						case "Go East": foe = grid[yPosition][xPosition + 1];
+						case "Go East": foe = grid[xPosition + 1][yPosition];
 										break;
-						case "Go West": foe = grid[yPosition][xPosition - 1];
+						case "Go West": foe = grid[xPosition - 1][yPosition];
 										break;
-						case "Go North":foe = grid[yPosition - 1][xPosition];
+						case "Go North":foe = grid[xPosition][yPosition + 1];
 										break;
-						case "Go South":foe = grid[yPosition + 1][xPosition];
+						case "Go South":foe = grid[xPosition][yPosition - 1];
 										break;
 						default:		foe = new Character("Rock Lee");
 										break;
 
-								}
+					}
 
 					if (foe == null) {
 						choice = choice + index + ". " + options[j] + " to return to the Hidden Leaf Village\n";
 					} else if (foe.alive) {
-						choice = choice + index + ". " + options[j] + " to fight " + foe.name + ", " + foe.element + " ninja\n";
+						choice = choice + index + ". " + options[j] + " to fight " + foe.getName() + ", " + foe.element + " ninja\n";
 					} else {
-						choice = choice + index + ". " + options[j] + " to the remains of " + foe.name + "\n";
+						choice = choice + index + ". " + options[j] + " to the remains of " + foe.getName() + "\n";
 					}
 
 					index += 1;
@@ -417,14 +419,14 @@ public class game {
 
 	public static void moveUp() {
 		
-		yPosition -= 1;
+		yPosition += 1;
 		fight();
 
 	}
 
 	public static void moveDown() {
 
-		yPosition += 1;
+		yPosition -= 1;
 		fight();
 
 	}
@@ -436,7 +438,7 @@ public class game {
 			return;
 		}
 
-		Character ninja = grid[yPosition][xPosition];
+		Character ninja = grid[xPosition][yPosition];
 
 		if(ninja.isAlive() == true){
 			JOptionPane.showMessageDialog(null, "A level " + ninja.getLevel() + " " + ninja.getName() + " appears before you");
@@ -480,7 +482,7 @@ public class game {
 
 				while(!tryParseInt(lolshop)) {
 
-					lolshop = JOptionPane.showInputDialog(null, "I'm always happy to take your money!\nYou have: " + joe.gold + " gold\nThese are the items in my shop:\n" + itemList + "And if you don't want anything, then just\n5. Leave the store");
+					lolshop = JOptionPane.showInputDialog(null, "I'm always happy to take your money!\nYou have: " + joe.gold + " gold\nThese are the items in my shop:\n" + itemList + "And if you don't want anything, then just\n" + (league.storeSize() + 1) + ". Leave the store");
 
 					if (lolshop == null) {
 					
@@ -495,7 +497,7 @@ public class game {
 
 			} while (index > league.storeSize() || index < 1);
 			
-			if(index == league.storeSize()) {
+			if(index == league.storeSize() + 1) {
 				JOptionPane.showMessageDialog(null, "You scamper from the store\nhoping to pillage more gold\nbefore this amazing sale ends");
 				return;
 			} else {
