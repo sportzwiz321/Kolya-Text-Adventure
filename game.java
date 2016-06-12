@@ -5,7 +5,7 @@ public class game {
 
 	public static int xPosition = 0;
 	public static int yPosition = 0;
-	public static Character joe;
+	public static Hero joe;
 	public static Character grid[][];
 
 	public static void main(String[] args) throws PrematureExitGameException {
@@ -14,8 +14,8 @@ public class game {
 		Character baddie;
 		int killCount = 0;
 		boolean gameWon = false;
-		int mapx = 3;
-		int mapy = 3;
+		int mapx = 5;
+		int mapy = 5;
 		int error;
 		Store lol = new Store();
 		lol.insert(new Item("B.F. Sword", 5, "AD", 5));
@@ -80,16 +80,18 @@ public class game {
 
 		} while (type > 5 || type < 1);
 
+		joe = new Hero(name);
+
 		if (type == 1) {
-			joe = new Fire(name);
+			joe.setElement(new Fire());
 		} else if (type == 2) {
-			joe = new Water(name);
+			joe.setElement(new Water());
 		} else if (type == 3) {
-			joe = new Earth(name);
+			joe.setElement(new Earth());
 		} else if (type == 4) {
-			joe = new Wind(name);
+			joe.setElement(new Wind());
 		} else if (type == 5) {
-			joe = new Thunder(name);
+			joe.setElement(new Thunder());
 		}
 
 		String difficulty;
@@ -122,11 +124,11 @@ public class game {
 			difficulty = "Hard";
 		}
 
-		JOptionPane.showMessageDialog(null, "Name: " + joe.name + "\nElement: " + joe.element + "\nDifficulty: " + difficulty + "\nHP: " + joe.healthPoints + "\nGold: " + joe.gold + "\nYou are strong against elements: " + joe.strength1 + " and " + joe.strength2 + "\nYou are weak against elements: " + joe.weakness1 + " and " + joe.weakness2);
-		System.out.println(joe.name);
-		System.out.println(joe.element);
+		JOptionPane.showMessageDialog(null, "Name: " + joe.getName() + "\nElement: " + joe.getElementType() + "\nDifficulty: " + difficulty + "\nHP: " + joe.healthPoints + "\nGold: " + joe.goldPouch() + "\nYou are strong against elements: " + joe.strength1 + " and " + joe.strength2 + "\nYou are weak against elements: " + joe.weakness1 + " and " + joe.weakness2);
+		System.out.println(joe.getName());
+		System.out.println(joe.getElementType());
 		String menuAction;
-		grid = new Character[mapx][mapy];
+		grid = new Character[mapx-dif][mapy-dif];
 
 		for (int y = 0 ; y < mapy ; y++) {
 			for (int x = 0 ; x < mapx ; x++) {
@@ -137,15 +139,20 @@ public class game {
 					int selector = rand.nextInt(5) + 1;
 
 					switch (selector) {
-						case 1: monster = new Fire("Sasuke, the Avenger Hokage");
+						case 1: monster = new Character("Sasuke, the Avenger Hokage");
+								monster.setElement(new Fire());
 								break;
-						case 2: monster = new Water("Zabuza, the Demon Mizukage");
+						case 2: monster = new Character("Zabuza, the Demon Mizukage");
+								monster.setElement(new Water());
 								break;
-						case 3: monster = new Earth("Gaara, the Sand Beastly Kazekage");
+						case 3: monster = new Character("Gaara, the Sand Beastly Kazekage");
+								monster.setElement(new Earth());
 								break;
-						case 4: monster = new Wind("Naruto, the Future Kuncklehead Hokage");
+						case 4: monster = new Character("Naruto, the Future Kuncklehead Hokage");
+								monster.setElement(new Wind());
 								break;
-						case 5: monster = new Thunder("Kakashi, the Copycat Hokage");
+						case 5: monster = new Character("Kakashi, the Copycat Hokage");
+								monster.setElement(new Thunder());
 								break;
 						default: monster = new Character("Ninja");
 								break;
@@ -157,34 +164,41 @@ public class game {
 
 					grid[x][y] = monster;
 
-					System.out.println("We have a " + monster.name + " at position " + x + "," + y);
+					System.out.println("We have a " + monster.getName() + " at position " + x + "," + y);
 
 				} else if (!(x == 0 && y == 0)) {
 					Random rand = new Random();
 					int selector = rand.nextInt(5) + 1;
 
 					switch (selector) {
-						case 1: monster = new Fire("Blaziken, the Avenger");
+						case 1: monster = new Character("Blaziken, the Avenger");
+								monster.setElement(new Fire());
 								break;
-						case 2: monster = new Water("Feraligator, the Demon in the Mist");
+						case 2: monster = new Character("Feraligator, the Demon in the Mist");
+								monster.setElement(new Water());
 								break;
-						case 3: monster = new Earth("Torterra, the Sand Beast");
+						case 3: monster = new Character("Torterra, the Sand Beast");
+								monster.setElement(new Earth());
 								break;
-						case 4: monster = new Wind("Swello, the Future Hokage");
+						case 4: monster = new Character("Swello, the Future Hokage");
+								monster.setElement(new Wind());
 								break;
-						case 5: monster = new Thunder("Zapdos, the Copycat Ninja");
+						case 5: monster = new Character("Zapdos, the Copycat Ninja");
+								monster.setElement(new Thunder());
 								break;
 						default: monster = new Character("Ninja");
 								break;
 					}
 
-					if (dif > 0) {
-						monster.levelUp(dif);
+					if (dif == 0) {
+						monster.weaken();
+					} else if (dif == 2) {
+						monster.strengthen();
 					}
 					
 					grid[x][y] = monster;
 
-					System.out.println("We have a " + monster.name + " at position " + x + "," + y);
+					System.out.println("We have a " + monster.getName() + " at position " + x + "," + y);
 
 				}
 				
@@ -285,7 +299,7 @@ public class game {
 					if (foe == null) {
 						choice = choice + index + ". " + options[j] + " to return to the Hidden Leaf Village\n";
 					} else if (foe.alive) {
-						choice = choice + index + ". " + options[j] + " to fight " + foe.getName() + ", " + foe.element + " ninja\n";
+						choice = choice + index + ". " + options[j] + " to fight " + foe.getName() + ", " + foe.getElementType() + " ninja\n";
 					} else {
 						choice = choice + index + ". " + options[j] + " to the remains of " + foe.getName() + "\n";
 					}
@@ -394,7 +408,7 @@ public class game {
 			case "Go South": moveDown();
 							break;
 			case "Commit Seppuku":	joe.commitSeppuku();
-									JOptionPane.showMessageDialog(null, "You, " + joe.name + ", no longer wish to live in this world with us\nYou commit Seppuku and writhe uncontrollably and agonizingly to your death");
+									JOptionPane.showMessageDialog(null, "You, " + joe.getName() + ", no longer wish to live in this world with us\nYou commit Seppuku and writhe uncontrollably and agonizingly to your death");
 									break;
 			default: JOptionPane.showMessageDialog(null, "You have gone nowhere!");
 							break;
@@ -482,7 +496,7 @@ public class game {
 
 				while(!tryParseInt(lolshop)) {
 
-					lolshop = JOptionPane.showInputDialog(null, "I'm always happy to take your money!\nYou have: " + joe.gold + " gold\nThese are the items in my shop:\n" + itemList + "And if you don't want anything, then just\n" + (league.storeSize() + 1) + ". Leave the store");
+					lolshop = JOptionPane.showInputDialog(null, "I'm always happy to take your money!\nYou have: " + joe.goldPouch() + " gold\nThese are the items in my shop:\n" + itemList + "And if you don't want anything, then just\n" + (league.storeSize() + 1) + ". Leave the store");
 
 					if (lolshop == null) {
 					
@@ -504,11 +518,10 @@ public class game {
 				Item stick = league.retrieveItem(index);
 
 				int cost = stick.getCost();
-				if (cost > joe.gold) {
+				if (cost > joe.goldPouch()) {
 					JOptionPane.showMessageDialog(null, "Insufficient gold for a " + stick.getName() + "\nPlease come again later.");
 				} else {
-					joe.gold -= cost;
-					JOptionPane.showMessageDialog(null, "You have bought a " + stick.getName() + " for " + stick.getCost() + " gold\nYou now have " + joe.gold + " gold remaining.");
+					JOptionPane.showMessageDialog(null, "You have bought a " + stick.getName() + " for " + stick.getCost() + " gold\nYou now have " + joe.goldPouch() + " gold remaining.");
 					joe.empower(stick);
 				}
 			}
