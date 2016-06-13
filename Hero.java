@@ -56,38 +56,38 @@ public class Hero extends Character {
 
 			do {
 
-				action = JOptionPane.showInputDialog(null, "Battle!!! " + baddie.getName() + " has " + baddie.healthPoints + " remaining.\n You have " + healthPoints + " left.\nWhat do you do?\n1) Fight\n2) Recover");
+				action = JOptionPane.showInputDialog(null, "Battle!!! " + baddie.getName() + " has " + baddie.healthPointsRemaining() + " HP\n You have " + healthPointsRemaining() + " HP\nWhat do you do?\n1) Fight\n2) Recover");
 		
 			} while(!(action.equals("1") || action.equals("2")));
 
 			if(action.equals("1")) {
 				int damageDealt = attack(baddie);
-				if (baddie.alive) {
-					JOptionPane.showMessageDialog(null, "You hit " + baddie.getName() + " with a " + getElementType() + " strike for " + damageDealt + " damage\nBaddie has " + baddie.healthPoints + " HP left");
+				if (baddie.isAlive()) {
+					JOptionPane.showMessageDialog(null, "You hit " + baddie.getName() + " with a " + getElementType() + " strike for " + damageDealt + " damage\nBaddie has " + baddie.healthPointsRemaining() + " HP left");
 				} else {
 					JOptionPane.showMessageDialog(null, "You hit " + baddie.getName() + " with a final " + getElementType() + " strike for " + damageDealt + " damage\nYou have killed a baddie! Congratulations on not dying to a baddie...");
 				}
 				
 			} else if (action.equals("2")) {
 				int recoveredHP = heal();
-				JOptionPane.showMessageDialog(null, "You heal yourself for " + recoveredHP + " HP\nYou now have " + healthPoints + " HP left");
+				JOptionPane.showMessageDialog(null, "You heal yourself for " + recoveredHP + " HP\nYou now have " + healthPointsRemaining() + " HP left");
 			}
 
-			if (baddie.alive) {
+			if (baddie.isAlive()) {
 
 				int damageReceived = baddie.attack(this);
 
-				if (alive) {
-					JOptionPane.showMessageDialog(null, baddie.getName() + " hit you with a " + baddie.getElementType() + " strike for " + damageReceived + " damage\nYou have " + healthPoints + " HP left");
+				if (isAlive()) {
+					JOptionPane.showMessageDialog(null, baddie.getName() + " hit you with a " + baddie.getElementType() + " strike for " + damageReceived + " damage\nYou have " + healthPointsRemaining() + " HP left");
 				} else {
 					JOptionPane.showMessageDialog(null, baddie.getName() + " hit you with a final " + baddie.getElementType() + " strike for " + damageReceived + " damage\nYou have died to a baddie, go home and re-evaluate the way you make life decisions.");
 				}
 
 			}
 
-		} while(!(baddie.healthPoints == 0 || healthPoints == 0));
+		} while(!(baddie.getHealthPoints() == 0 || getHealthPoints() == 0));
 
-		if (baddie.healthPoints == 0) {
+		if (baddie.getHealthPoints() == 0) {
 
 			if (head == null) {
 				head = new Node(baddie);
@@ -104,13 +104,13 @@ public class Hero extends Character {
 				
 				levelUp();
 
-				JOptionPane.showMessageDialog(null, "You have leveled up to level " + level);
+				JOptionPane.showMessageDialog(null, "You have leveled up to level " + getLevel());
 
 			}
 
 			if (!(baddie.isBoss())) {
 				
-				JOptionPane.showMessageDialog(null, "You currently have " + experience + " out of " + expToNextLevel + " experience points and " + gold + " gold.\nYou are currently a level " + level + " " + getElementType() + " hero");
+				JOptionPane.showMessageDialog(null, "You currently have " + experience + " out of " + expToNextLevel + " experience points and " + gold + " gold.\nYou are currently a level " + getLevel() + " " + getElementType() + " hero");
 
 				JOptionPane.showMessageDialog(null, "So far, you have killed:\n" + toString());
 
@@ -129,14 +129,14 @@ public class Hero extends Character {
 		String boost = getName() + ", your " + stick.getStat() + " has increased by " + stick.getStatBoost() + " points\n";
 
 		switch(stick.getStat()) {
-			case "AD": attackDamage += stick.getStatBoost();
-					JOptionPane.showMessageDialog(null, boost + "Your current attack damage is now: " + attackDamage);
+			case "AD": changeAD(stick.getStatBoost());
+					JOptionPane.showMessageDialog(null, boost + "Your current attack damage is now: " + getAttackDamage());
 				break;
-			case "ARMOR": defense += stick.getStatBoost();
-					JOptionPane.showMessageDialog(null, boost + "Your current defense is now: " + defense);
+			case "ARMOR": changeARMOR(stick.getStatBoost());
+					JOptionPane.showMessageDialog(null, boost + "Your current defense is now: " + getDefense());
 				break;
-			case "HP": maximumHealthPoints += stick.getStatBoost();
-					JOptionPane.showMessageDialog(null, boost + "Your current maximum health points is now: " + maximumHealthPoints);
+			case "HP": changeMAXHP(stick.getStatBoost());
+					JOptionPane.showMessageDialog(null, boost + "Your current maximum health points is now: " + getMaximumHealthPoints());
 				break;
 			default:
 				break;
@@ -145,8 +145,8 @@ public class Hero extends Character {
 	}
 
 	public void commitSeppuku() {
-		healthPoints = 0;
-		alive = false;
+		JOptionPane.showMessageDialog(null, "You, " + getName() + ", no longer wish to live in this world with us\nYou commit Seppuku and writhe uncontrollably and agonizingly to your death");
+		enterDeath();
 	}
 
 	public String toString() {

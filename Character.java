@@ -4,9 +4,8 @@ public class Character {
 
 	private String name;
 	private Element type;
-	public int healthPoints, maximumHealthPoints, attackDamage, defense, level;
-	public boolean alive;
-	public String strength1, strength2, weakness1, weakness2;
+	private int healthPoints, maximumHealthPoints, attackDamage, defense, level;
+	private boolean alive;
 	private boolean boss;
 
 	public Character(String name) {
@@ -19,10 +18,6 @@ public class Character {
 		defense = 0;
 		alive = true;
 		level = 1;
-		strength1 = null;
-		strength2 = null;
-		weakness1 = null;
-		weakness2 = null;
 		boss = false;
 
 	}
@@ -36,10 +31,6 @@ public class Character {
 		this.defense = defense;
 		alive = true;
 		level = 1;
-		strength1 = null;
-		strength2 = null;
-		weakness1 = null;
-		weakness2 = null;
 		boss = false;
 	}
 
@@ -80,6 +71,38 @@ public class Character {
 		}
 	}
 
+	public String attackStrengths() {
+
+		return type.elementStrengths();
+
+	}
+
+	public String attackWeaknesses() {
+
+		return type.elementWeaknesses();
+
+	}
+
+	public int getAttackDamage() {
+		return attackDamage;
+	}
+
+	public int getDefense() {
+		return defense;
+	}
+
+	public int getHealthPoints() {
+		return healthPoints;
+	}
+
+	public int getMaximumHealthPoints() {
+		return maximumHealthPoints;
+	}
+
+	public String healthPointsRemaining() {
+		return healthPoints + "/" + maximumHealthPoints;
+	}
+
 	public int attack(Character enemy) {
 
 		float initialDamage = attackDamage - enemy.defense;
@@ -110,8 +133,7 @@ public class Character {
 		} else {
 
 			damageDealt = enemy.healthPoints;
-			enemy.healthPoints = 0;
-			enemy.alive = false;
+			enemy.enterDeath();
 
 		}
 
@@ -168,28 +190,44 @@ public class Character {
 		}
 	}
 
+	public void changeAD(int change) {
+		attackDamage += change;
+	}
+
+	public void changeARMOR(int change) {
+		defense += change;
+	}
+
+	public void changeMAXHP(int change) {
+		maximumHealthPoints += change;
+		healthPoints += change;
+	}
+
 	public void weaken() {
 
-		healthPoints -= 15;
-		maximumHealthPoints -= 15;
-		attackDamage -= 3;
+		changeMAXHP(-15);
+		changeAD(-3);
 		if (defense > 0) {
-			defense -= 1;
+			changeARMOR(-1);
 		}
 
 	}
 
 	public void strengthen() {
 
-		healthPoints += 15;
-		maximumHealthPoints += 15;
-		attackDamage += 3;
-		defense += 1;
+		changeMAXHP(15);
+		changeAD(3);
+		changeARMOR(1);
 
 	}
 
 	public void setElement(Element type) {
 		this.type = type;
+	}
+
+	public void enterDeath() {
+		healthPoints = 0;
+		alive = false;
 	}
 
 }

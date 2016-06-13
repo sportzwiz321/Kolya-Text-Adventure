@@ -123,17 +123,19 @@ public class game {
 		} else {
 			difficulty = "Hard";
 		}
+		mapx -= dif;
+		mapy -= dif;
 
-		JOptionPane.showMessageDialog(null, "Name: " + joe.getName() + "\nElement: " + joe.getElementType() + "\nDifficulty: " + difficulty + "\nHP: " + joe.healthPoints + "\nGold: " + joe.goldPouch() + "\nYou are strong against elements: " + joe.strength1 + " and " + joe.strength2 + "\nYou are weak against elements: " + joe.weakness1 + " and " + joe.weakness2);
+		JOptionPane.showMessageDialog(null, "Name: " + joe.getName() + "\nElement: " + joe.getElementType() + "\nDifficulty: " + difficulty + "\nHP: " + joe.getHealthPoints() + "\nGold: " + joe.goldPouch() + "\nYou are strong against elements: " + joe.attackStrengths() + "\nYou are weak against elements: " + joe.attackWeaknesses());
 		System.out.println(joe.getName());
 		System.out.println(joe.getElementType());
 		String menuAction;
-		grid = new Character[mapx-dif][mapy-dif];
+		grid = new Character[mapx][mapy];
 
 		for (int y = 0 ; y < mapy ; y++) {
 			for (int x = 0 ; x < mapx ; x++) {
 				Character monster;
-				if (x == mapx - 1 && y == mapy -1) {
+				if (x == mapx - 1 && y == mapy - 1) {
 
 					Random rand = new Random();
 					int selector = rand.nextInt(5) + 1;
@@ -298,7 +300,7 @@ public class game {
 
 					if (foe == null) {
 						choice = choice + index + ". " + options[j] + " to return to the Hidden Leaf Village\n";
-					} else if (foe.alive) {
+					} else if (foe.isAlive()) {
 						choice = choice + index + ". " + options[j] + " to fight " + foe.getName() + ", " + foe.getElementType() + " ninja\n";
 					} else {
 						choice = choice + index + ". " + options[j] + " to the remains of " + foe.getName() + "\n";
@@ -383,12 +385,12 @@ public class game {
 			move(options[sel-1]);
 
 
-		} while(!((joe.healthPoints == 0) || (grid[mapy-1][mapx-1].healthPoints == 0)));
+		} while(!((joe.getHealthPoints() == 0) || (grid[mapy-1][mapx-1].getHealthPoints() == 0)));
 
-		if (grid[mapy-1][mapx-1].healthPoints == 0) {
+		if (grid[mapy-1][mapx-1].getHealthPoints() == 0) {
 			JOptionPane.showMessageDialog(null, "You have won the game, by slaying " + boss.getName() + "\nCongratulations!");
 			JOptionPane.showMessageDialog(null, "Along the way, you managed to slay:\n" + joe.toString());
-		} else if (joe.healthPoints == 0) {
+		} else if (joe.getHealthPoints() == 0) {
 			JOptionPane.showMessageDialog(null, "You are no longer priveleged enough to play this game, this time around.\nBetter luck next time...");
 			JOptionPane.showMessageDialog(null, "Before you died, you managed to kill:\n" + joe.toString());
 		}
@@ -408,7 +410,6 @@ public class game {
 			case "Go South": moveDown();
 							break;
 			case "Commit Seppuku":	joe.commitSeppuku();
-									JOptionPane.showMessageDialog(null, "You, " + joe.getName() + ", no longer wish to live in this world with us\nYou commit Seppuku and writhe uncontrollably and agonizingly to your death");
 									break;
 			default: JOptionPane.showMessageDialog(null, "You have gone nowhere!");
 							break;
@@ -515,14 +516,14 @@ public class game {
 				JOptionPane.showMessageDialog(null, "You scamper from the store\nhoping to pillage more gold\nbefore this amazing sale ends");
 				return;
 			} else {
-				Item stick = league.retrieveItem(index);
+				Item stick = hextech[index - 1];
 
 				int cost = stick.getCost();
 				if (cost > joe.goldPouch()) {
 					JOptionPane.showMessageDialog(null, "Insufficient gold for a " + stick.getName() + "\nPlease come again later.");
 				} else {
-					JOptionPane.showMessageDialog(null, "You have bought a " + stick.getName() + " for " + stick.getCost() + " gold\nYou now have " + joe.goldPouch() + " gold remaining.");
 					joe.empower(stick);
+					JOptionPane.showMessageDialog(null, "You have bought a " + stick.getName() + " for " + stick.getCost() + " gold\nYou now have " + joe.goldPouch() + " gold remaining.");
 				}
 			}
 
