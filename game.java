@@ -6,7 +6,8 @@ public class game {
 	public static int xPosition = 0;
 	public static int yPosition = 0;
 	public static Hero joe;
-	public static Character grid[][];
+	// public static Character grid[][];
+	public static Location area[][];
 
 	public static void main(String[] args) throws PrematureExitGameException {
 		String name,option;
@@ -130,11 +131,14 @@ public class game {
 		System.out.println(joe.getName());
 		System.out.println(joe.getElementType());
 		String menuAction;
-		grid = new Character[mapx][mapy];
+		// grid = new Character[mapx][mapy];
+		area = new Location[mapx][mapy];
+		area[0][0] = null;
 
 		for (int y = 0 ; y < mapy ; y++) {
 			for (int x = 0 ; x < mapx ; x++) {
 				Character monster;
+				Location block;
 				if (x == mapx - 1 && y == mapy - 1) {
 
 					Random rand = new Random();
@@ -164,33 +168,43 @@ public class game {
 
 					boss = monster;
 
-					grid[x][y] = monster;
+					// grid[x][y] = monster;
+
+					block = new Location();
+
+					block.setMonster(monster);
+
+					area[x][y] = block;
 
 					System.out.println("We have a " + monster.getName() + " at position " + x + "," + y);
 
 				} else if (!(x == 0 && y == 0)) {
-					Random rand = new Random();
-					int selector = rand.nextInt(5) + 1;
+					// Random rand = new Random();
+					// int selector = rand.nextInt(5) + 1;
 
-					switch (selector) {
-						case 1: monster = new Character("Blaziken, the Avenger");
-								monster.setElement(new Fire());
-								break;
-						case 2: monster = new Character("Feraligator, the Demon in the Mist");
-								monster.setElement(new Water());
-								break;
-						case 3: monster = new Character("Torterra, the Sand Beast");
-								monster.setElement(new Earth());
-								break;
-						case 4: monster = new Character("Swello, the Future Hokage");
-								monster.setElement(new Wind());
-								break;
-						case 5: monster = new Character("Zapdos, the Copycat Ninja");
-								monster.setElement(new Thunder());
-								break;
-						default: monster = new Character("Ninja");
-								break;
-					}
+					// switch (selector) {
+					// 	case 1: monster = new Character("Blaziken, the Avenger");
+					// 			monster.setElement(new Fire());
+					// 			break;
+					// 	case 2: monster = new Character("Feraligator, the Demon in the Mist");
+					// 			monster.setElement(new Water());
+					// 			break;
+					// 	case 3: monster = new Character("Torterra, the Sand Beast");
+					// 			monster.setElement(new Earth());
+					// 			break;
+					// 	case 4: monster = new Character("Swello, the Future Hokage");
+					// 			monster.setElement(new Wind());
+					// 			break;
+					// 	case 5: monster = new Character("Zapdos, the Copycat Ninja");
+					// 			monster.setElement(new Thunder());
+					// 			break;
+					// 	default: monster = new Character("Ninja");
+					// 			break;
+					// }
+
+					block = new Location();
+
+					monster = block.getNewMonster();
 
 					if (dif == 0) {
 						monster.weaken();
@@ -198,7 +212,9 @@ public class game {
 						monster.strengthen();
 					}
 					
-					grid[x][y] = monster;
+					// grid[x][y] = monster;
+
+					area[x][y] = block;
 
 					System.out.println("We have a " + monster.getName() + " at position " + x + "," + y);
 
@@ -282,16 +298,39 @@ public class game {
 			for (int j = 0; j < 4 ; j++ ) {
 				if (!(options[j] == null)) {
 
-					Character foe;
+					Character foe = null;
+					// switch(options[j]) {
+
+					// 	case "Go East": foe = grid[xPosition + 1][yPosition];
+					// 					break;
+					// 	case "Go West": foe = grid[xPosition - 1][yPosition];
+					// 					break;
+					// 	case "Go North":foe = grid[xPosition][yPosition + 1];
+					// 					break;
+					// 	case "Go South":foe = grid[xPosition][yPosition - 1];
+					// 					break;
+					// 	default:		foe = new Character("Rock Lee");
+					// 					break;
+
+					// }
+
 					switch(options[j]) {
 
-						case "Go East": foe = grid[xPosition + 1][yPosition];
+						case "Go East":	if (area[xPosition + 1][yPosition] != null) {
+											foe = area[xPosition + 1][yPosition].getNewMonster();
+										}
 										break;
-						case "Go West": foe = grid[xPosition - 1][yPosition];
+						case "Go West": if (area[xPosition - 1][yPosition] != null) {
+											foe = area[xPosition - 1][yPosition].getNewMonster();
+										}
 										break;
-						case "Go North":foe = grid[xPosition][yPosition + 1];
+						case "Go North":if (area[xPosition][yPosition + 1] != null) {
+											foe = area[xPosition][yPosition + 1].getNewMonster();
+										}
 										break;
-						case "Go South":foe = grid[xPosition][yPosition - 1];
+						case "Go South":if (area[xPosition][yPosition - 1] != null) {
+											foe = area[xPosition][yPosition - 1].getNewMonster();
+										}
 										break;
 						default:		foe = new Character("Rock Lee");
 										break;
@@ -384,10 +423,18 @@ public class game {
 
 			move(options[sel-1]);
 
+		} while(joe.isAlive() && area[mapx - 1][mapy - 1].getCurrentMonster().isAlive());
+		// } while(!((joe.getHealthPoints() == 0) || (grid[mapy-1][mapx-1].getHealthPoints() == 0)));
 
-		} while(!((joe.getHealthPoints() == 0) || (grid[mapy-1][mapx-1].getHealthPoints() == 0)));
+		// if (grid[mapy-1][mapx-1].getHealthPoints() == 0) {
+		// 	JOptionPane.showMessageDialog(null, "You have won the game, by slaying " + boss.getName() + "\nCongratulations!");
+		// 	JOptionPane.showMessageDialog(null, "Along the way, you managed to slay:\n" + joe.toString());
+		// } else if (joe.getHealthPoints() == 0) {
+		// 	JOptionPane.showMessageDialog(null, "You are no longer priveleged enough to play this game, this time around.\nBetter luck next time...");
+		// 	JOptionPane.showMessageDialog(null, "Before you died, you managed to kill:\n" + joe.toString());
+		// }
 
-		if (grid[mapy-1][mapx-1].getHealthPoints() == 0) {
+		if (area[mapy-1][mapx-1].getCurrentMonster().getHealthPoints() == 0) {
 			JOptionPane.showMessageDialog(null, "You have won the game, by slaying " + boss.getName() + "\nCongratulations!");
 			JOptionPane.showMessageDialog(null, "Along the way, you managed to slay:\n" + joe.toString());
 		} else if (joe.getHealthPoints() == 0) {
@@ -453,7 +500,8 @@ public class game {
 			return;
 		}
 
-		Character ninja = grid[xPosition][yPosition];
+		Character ninja = area[xPosition][yPosition].getCurrentMonster();
+		// Character ninja = grid[xPosition][yPosition];
 
 		if(ninja.isAlive() == true){
 			JOptionPane.showMessageDialog(null, "A level " + ninja.getLevel() + " " + ninja.getName() + " appears before you");
