@@ -8,6 +8,7 @@ public class Element {
 		this.type = type;
 		strengths = null;
 		weaknesses = null;
+		updateEffectiveness();
 	}
 
 	public boolean superEffective(Character monster) {
@@ -54,6 +55,30 @@ public class Element {
 				}
 			}
 			return new String(weakness);
+		}
+
+	}
+
+	public void updateEffectiveness() {
+
+		switch(type) {
+			case "Fire": strengths = new String[]{"Earth", "Thunder"};
+						weaknesses = new String[]{"Water", "Wind"};
+						break;
+			case "Water": strengths = new String[]{"Fire", "Wind"};
+						weaknesses = new String[]{"Earth", "Thunder"};
+						break;
+			case "Earth": strengths = new String[]{"Water", "Thunder"};
+						weaknesses = new String[]{"Fire", "Wind"};
+						break;
+			case "Wind": strengths = new String[]{"Fire", "Earth"};
+						weaknesses = new String[]{"Water", "Thunder"};
+						break;
+			case "Thunder": strengths = new String[]{"Water", "Wind"};
+						weaknesses = new String[]{"Fire", "Earth"};
+						break;
+			default:
+						break;
 		}
 
 	}

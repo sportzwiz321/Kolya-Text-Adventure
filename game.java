@@ -119,13 +119,15 @@ public class game {
 
 		if (dif == 0) {
 			difficulty = "Easy";
+			mapx += 1;
+			mapy += 1;
 		} else if (dif == 1) {
 			difficulty = "Normal";
 		} else {
 			difficulty = "Hard";
+			mapx -= 1;
+			mapy -= 1;
 		}
-		mapx -= dif;
-		mapy -= dif;
 
 		JOptionPane.showMessageDialog(null, "Name: " + joe.getName() + "\nElement: " + joe.getElementType() + "\nDifficulty: " + difficulty + "\nHP: " + joe.getHealthPoints() + "\nGold: " + joe.goldPouch() + "\nYou are strong against elements: " + joe.attackStrengths() + "\nYou are weak against elements: " + joe.attackWeaknesses());
 		System.out.println(joe.getName());
@@ -133,7 +135,7 @@ public class game {
 		String menuAction;
 		// grid = new Character[mapx][mapy];
 		area = new Location[mapx][mapy];
-		area[0][0] = null;
+		area[0][0] = new Location();
 
 		for (int y = 0 ; y < mapy ; y++) {
 			for (int x = 0 ; x < mapx ; x++) {
@@ -168,15 +170,19 @@ public class game {
 
 					boss = monster;
 
+					adjustDifficulty(boss, difficulty);
+
 					// grid[x][y] = monster;
 
 					block = new Location();
+
+					block.setName();
 
 					block.setMonster(monster);
 
 					area[x][y] = block;
 
-					System.out.println("We have a " + monster.getName() + " at position " + x + "," + y);
+					System.out.println("We have a " + monster + " at position " + x + "," + y);
 
 				} else if (!(x == 0 && y == 0)) {
 					// Random rand = new Random();
@@ -204,19 +210,17 @@ public class game {
 
 					block = new Location();
 
+					block.setName();
+
 					monster = block.getNewMonster();
 
-					if (dif == 0) {
-						monster.weaken();
-					} else if (dif == 2) {
-						monster.strengthen();
-					}
+					adjustDifficulty(monster, difficulty);
 					
 					// grid[x][y] = monster;
 
 					area[x][y] = block;
 
-					System.out.println("We have a " + monster.getName() + " at position " + x + "," + y);
+					System.out.println("We have a " + monster + " at position " + x + "," + y);
 
 				}
 				
@@ -291,14 +295,15 @@ public class game {
 
 			}
 
-			String choice = "What would you like to do? You are currently at " + xPosition + "," + yPosition + "\n";
+			String choice = "What would you like to do? You are currently at " + xPosition + "," + yPosition + " " + area[xPosition][yPosition].getDescription() + "\n";
 
 			int index = 1;
 
 			for (int j = 0; j < 4 ; j++ ) {
 				if (!(options[j] == null)) {
 
-					Character foe = null;
+					// Character foe = null;
+
 					// switch(options[j]) {
 
 					// 	case "Go East": foe = grid[xPosition + 1][yPosition];
@@ -314,35 +319,43 @@ public class game {
 
 					// }
 
+					Location place;
+
 					switch(options[j]) {
 
-						case "Go East":	if (area[xPosition + 1][yPosition] != null) {
-											foe = area[xPosition + 1][yPosition].getNewMonster();
-										}
+						case "Go East":	place = area[xPosition + 1][yPosition];
 										break;
-						case "Go West": if (area[xPosition - 1][yPosition] != null) {
-											foe = area[xPosition - 1][yPosition].getNewMonster();
-										}
+						case "Go West": place = area[xPosition - 1][yPosition];
 										break;
-						case "Go North":if (area[xPosition][yPosition + 1] != null) {
-											foe = area[xPosition][yPosition + 1].getNewMonster();
-										}
+						case "Go North":place = area[xPosition][yPosition + 1];
 										break;
-						case "Go South":if (area[xPosition][yPosition - 1] != null) {
-											foe = area[xPosition][yPosition - 1].getNewMonster();
-										}
+						case "Go South":place = area[xPosition][yPosition - 1];
 										break;
-						default:		foe = new Character("Rock Lee");
+						default:		place = null;
 										break;
 
 					}
 
-					if (foe == null) {
+					// if (foe == null) {
+					// 	choice = choice + index + ". " + options[j] + " to return to the Hidden Leaf Village\n";
+					// } else if (foe.isAlive()) {
+					// 	adjustDifficulty(foe, difficulty);
+					// 	// choice = choice + index + ". " + options[j] + " to fight " + foe + "\n";
+					// 	choice = choice + index + ". " + options[j] + " to " + 
+					// } else {
+					// 	choice = choice + index + ". " + options[j] + " to the remains of " + foe + "\n";
+					// }
+
+					if (place.getName() == null) {
 						choice = choice + index + ". " + options[j] + " to return to the Hidden Leaf Village\n";
-					} else if (foe.isAlive()) {
-						choice = choice + index + ". " + options[j] + " to fight " + foe.getName() + ", " + foe.getElementType() + " ninja\n";
 					} else {
-						choice = choice + index + ". " + options[j] + " to the remains of " + foe.getName() + "\n";
+						Character foe = place.getNewMonster();
+						if (foe.isBoss()) {
+							choice = choice + index + ". " + options[j] + " to fight " + foe + "\n";
+						} else {
+							adjustDifficulty(foe, difficulty);
+							choice = choice + index + ". " + options[j] + " to " + place.getName() + ": " + place.getDescription() + "\n";
+						}
 					}
 
 					index += 1;
@@ -504,10 +517,10 @@ public class game {
 		// Character ninja = grid[xPosition][yPosition];
 
 		if(ninja.isAlive() == true){
-			JOptionPane.showMessageDialog(null, "A level " + ninja.getLevel() + " " + ninja.getName() + " appears before you");
+			JOptionPane.showMessageDialog(null, "A level " + ninja.getLevel() + " " + ninja + " appears before you");
 			ninja = joe.battle(ninja);
 		} else {
-			JOptionPane.showMessageDialog(null, "Master " + ninja.getName() + "'s dead corpse sits at your feet");
+			JOptionPane.showMessageDialog(null, "Master " + ninja + "'s dead corpse sits at your feet");
 		}
 
 	}
@@ -578,6 +591,19 @@ public class game {
 		} else if (input.equals("2")) {
 			JOptionPane.showMessageDialog(null, "You scamper from the store\nhoping to pillage more gold\nbefore this amazing sale ends");
 			return;
+		}
+
+	}
+
+	public static void adjustDifficulty(Character monster, String difficulty) {
+
+		switch(difficulty){
+			case "Hard": monster.strengthen();
+					break;
+			case "Easy": monster.weaken();
+					break;
+			default:
+					break;
 		}
 
 	}

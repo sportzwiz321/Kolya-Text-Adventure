@@ -51,6 +51,10 @@ public class Character {
 		return name;
 	}
 
+	public String toString() {
+		return name + ", " + type.elementType() + " warrior";
+	}
+
 	public boolean isAlive() {
 		return alive;
 	}

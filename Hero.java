@@ -46,7 +46,7 @@ public class Hero extends Character {
 		expToNextLevel += 25;
 	}
 
-	public Character battle(Character baddie) {
+	public Character battle(Character baddie) throws PrematureExitGameException {
 
 		String action;
 
@@ -56,16 +56,21 @@ public class Hero extends Character {
 
 			do {
 
-				action = JOptionPane.showInputDialog(null, "Battle!!! " + baddie.getName() + " has " + baddie.healthPointsRemaining() + " HP\n You have " + healthPointsRemaining() + " HP\nWhat do you do?\n1) Fight\n2) Recover");
+				action = JOptionPane.showInputDialog(null, "Battle!!! " + baddie + " has " + baddie.healthPointsRemaining() + " HP\n You have " + healthPointsRemaining() + " HP\nWhat do you do?\n1) Fight\n2) Recover");
 		
+				if (action == null) {
+					JOptionPane.showMessageDialog(null, "You have quit the game prematurely, I hope you die.");
+					throw new PrematureExitGameException("You have quit the game prematurely, I hope you die.");
+				}
+
 			} while(!(action.equals("1") || action.equals("2")));
 
 			if(action.equals("1")) {
 				int damageDealt = attack(baddie);
 				if (baddie.isAlive()) {
-					JOptionPane.showMessageDialog(null, "You hit " + baddie.getName() + " with a " + getElementType() + " strike for " + damageDealt + " damage\nBaddie has " + baddie.healthPointsRemaining() + " HP left");
+					JOptionPane.showMessageDialog(null, "You hit " + baddie + " with a " + getElementType() + " strike for " + damageDealt + " damage\nBaddie has " + baddie.healthPointsRemaining() + " HP left");
 				} else {
-					JOptionPane.showMessageDialog(null, "You hit " + baddie.getName() + " with a final " + getElementType() + " strike for " + damageDealt + " damage\nYou have killed a baddie! Congratulations on not dying to a baddie...");
+					JOptionPane.showMessageDialog(null, "You hit " + baddie + " with a final " + getElementType() + " strike for " + damageDealt + " damage\nYou have killed a baddie! Congratulations on not dying to a baddie...");
 				}
 				
 			} else if (action.equals("2")) {
@@ -78,9 +83,9 @@ public class Hero extends Character {
 				int damageReceived = baddie.attack(this);
 
 				if (isAlive()) {
-					JOptionPane.showMessageDialog(null, baddie.getName() + " hit you with a " + baddie.getElementType() + " strike for " + damageReceived + " damage\nYou have " + healthPointsRemaining() + " HP left");
+					JOptionPane.showMessageDialog(null, baddie + " hit you with a " + baddie.getElementType() + " strike for " + damageReceived + " damage\nYou have " + healthPointsRemaining() + " HP left");
 				} else {
-					JOptionPane.showMessageDialog(null, baddie.getName() + " hit you with a final " + baddie.getElementType() + " strike for " + damageReceived + " damage\nYou have died to a baddie, go home and re-evaluate the way you make life decisions.");
+					JOptionPane.showMessageDialog(null, baddie + " hit you with a final " + baddie.getElementType() + " strike for " + damageReceived + " damage\nYou have died to a baddie, go home and re-evaluate the way you make life decisions.");
 				}
 
 			}
@@ -157,7 +162,7 @@ public class Hero extends Character {
 			StringBuffer killList = new StringBuffer();
 			Node c = head;
 			while (c != null) {
-				killList.append(c.monster.getName() + "\n");
+				killList.append(c.monster + "\n");
 				c = c.next;
 			}
 			return new String(killList);
