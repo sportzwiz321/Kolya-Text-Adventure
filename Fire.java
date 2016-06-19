@@ -1,20 +1,23 @@
-public class Fire extends Character {
+public class Fire extends Element {
 
-	public Fire(String name) {
-
-		super(name);
-		element = "Fire";
-		healthPoints = 50;
-		maximumHealthPoints = 50;
-		attackDamage = 15;
-		defense = 5;
-		strength1 = "Earth";
-		strength2 = "Thunder";
-		weakness1 = "Water";
-		weakness2 = "Wind";
-
+	public Fire() {
+		super("Fire");
 	}
 
-	
+	public boolean superEffective(Character monster) {
+		if (monster.getElementType() == "Earth" || monster.getElementType() == "Thunder") {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean notVeryEffective(Character monster) {
+		if (monster.getElementType() == "Water" || monster.getElementType() == "Wind") {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 }
